@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head') %>
+<link href="css/allDays.css" rel="stylesheet" />
+<body>
+  <%- include('../partials/header') %>
+  <section id="allEntries"></section>
+  <section id="allDays">
+  <% days.forEach(day => { %>
+    <div>
+      <h3>Date: <%= day.date %></h3>
+      <p>Gratitude: <%= day.gratitude %></p>
+    </div>
+  <% }) %>
+  </section>
+</body>
+</html>

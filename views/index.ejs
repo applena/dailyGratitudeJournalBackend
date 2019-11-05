@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/head')%>
+<body>
+  <img src="img/background-paper.jpg" />
+  <%- include('./partials/header') %>
+  <h1>Daily Gratitudes</h1>
+  <form id="form" action="/dailyGratitude" method="post">
+    <legend>What are you grateful for this morning?</legend>
+    <label> A relationship:
+      <input name="relationship"></input>
+    </label>
+    <label> An opportunity today:
+      <input name="opportunity"></input>
+    </label>
+    <label> Something good that happended yesterday:
+      <input name="yesterday"></input>
+    </label>
+    <label> Something simple:
+      <input name="simple"></input>
+    </label>
+    <label>Who do I want to thank today?
+      <input name="thanks"></input>
+    </label>
+    <button>submit</button>
+  </form>
+</body>
+</html>
