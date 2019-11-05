@@ -48,3 +48,28 @@ h1{
   left: 15em;
   font-size: 3em;
 }
+
+@media(max-width:570px){
+  img{
+    display: none;
+  }
+
+  nav li a{
+    color: black;
+  }
+
+  form{
+    border: 2px solid black;
+    padding: 1em;
+    margin-top: 2em;
+  }
+
+  input, label, button, legend{
+    margin-left: 1em;
+  }
+
+  legend{
+    font-size: 1.1em;
+    font-weight: bold;
+  }
+}

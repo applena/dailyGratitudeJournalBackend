@@ -10,15 +10,17 @@
 
 #allDays{
   display: flex;
+  flex-wrap: wrap;
 }
 
 div{
   border: 2px solid black;
   padding: 1em;
   margin: 1em;
-  width: 400px;
-  height: 300px;
+  width: 300px;
+  height: 250px;
   overflow: scroll;
+  background-color: lightgoldenrodyellow;
 }
 
 h2{
