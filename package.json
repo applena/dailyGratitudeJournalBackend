@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/applena/dailyGratitudeJournalBackend#readme",
   "dependencies": {
+    "bcrypt": "3.0.6",
     "cors": "2.8.5",
     "dotenv": "8.2.0",
     "ejs": "2.7.1",

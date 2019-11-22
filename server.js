@@ -3,6 +3,8 @@
 const express = require('express');
 const cors = require('cors');
 const pg = require('pg');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 require('dotenv').config();
 require('ejs');
 
@@ -16,39 +18,87 @@ app.use(cors());
 const client = new pg.Client(process.env.DATABASE_URL)
 client.connect();
 
-app.get('/', displayGratitudeForm);
-app.post('/dailyGratitude', saveGratitude);
-app.get('/all', getAll);
+app.get('/', displayLoginForm);
+app.post('/users', findUser);
+app.get('/users/:id');
+app.post('/createAccount', createAccount);
+app.get('/createLogin', createLogin);
+app.post('/dailyGratitude/:id', saveGratitude);
+app.get('/all/:id', getAll);
+
+function displayLoginForm(request, response){
+  response.render('pages/home');
+}
+
+function createAccount(request, response){
+  let username = request.body.username;
+  let password = request.body.password;
+
+  bcrypt.hash(password, saltRounds)
+    .then(hash => {
+      let sql = 'insert into users (username, password) values ($1, $2) returning id';
+      let safeValues = [username, hash];
+      client.query(sql, safeValues)
+        .then((res) => {
+          let id = res.rows[0].id;
+          response.render(`index`, {id:id});
+        })
+      })
+}
+
+function createLogin(request, response){
+  response.render('pages/createAccount');
+}
+
+function findUser(request, response){
+  let user = request.body.username;
+  let password = request.body.password;
+
+  bcrypt.hash(password, saltRounds)
+    .then(hash => {
+      let sql='select * from users where username=$1 AND password=$2;'
+      let safeValues = [user,hash];
+    
+      client.query(sql, safeValues)
+        .then(results => {
+          if(results.rows.length > 0){
+            let id = results.rows[0].id;
+            response.render('index', {id: id});
+          } else {
+            response.redirect('/createLogin');
+          }
+        })
+    })
+  
+}
 
 function getAll(request, response){
-  let sql = 'SELECT * FROM daily';
-  client.query(sql)
+  let sql = 'SELECT * FROM daily where person = $1';
+  let safeValues = [request.params.id];
+  client.query(sql, safeValues)
     .then(results => {
       response.render('pages/allDays.ejs', { days: results.rows });
     })
 }
 
-function displayGratitudeForm(request, response){
-  response.render('index.ejs');
-}
-
 function saveGratitude(request, response){
   const gratitudeObj = request.body;
+  const userId = request.params.id;
 
   let gratitude  = gratitudeObj.relationship ? gratitudeObj.relationship 
   : gratitudeObj.opportunity ? gratitudeObj.opportunity 
   : gratitudeObj.yesterday ? gratitudeObj.yesterday 
   : gratitudeObj.simple
 
-  saveToPostgresQL(gratitude)
+  saveToPostgresQL(gratitude, userId)
   .then(() => {
-    response.redirect('/all');
+    response.redirect(`/all/${userId}`);
   })
 }
 
-function saveToPostgresQL(gratitude){
-  let sql = 'INSERT INTO daily (gratitude) VALUES ($1);';
-  let safeValues = [gratitude];
+function saveToPostgresQL(gratitude, userId){
+  let sql = 'INSERT INTO daily (gratitude, person) VALUES ($1, $2);';
+  let safeValues = [gratitude, userId];
 
   return client.query(sql, safeValues)
 }

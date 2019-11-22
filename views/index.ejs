@@ -5,7 +5,8 @@
   <img src="img/background-paper.jpg" />
   <%- include('./partials/header') %>
   <h1>Daily Gratitudes</h1>
-  <form id="form" action="/dailyGratitude" method="post">
+  <form id="form" action="/dailyGratitude/<%= id %>" method="post">
+    <input
     <legend>What are you grateful for this morning?</legend>
     <label> A relationship:
       <input name="relationship"></input>
@@ -25,4 +26,5 @@
     <button>submit</button>
   </form>
 </body>
+
 </html>

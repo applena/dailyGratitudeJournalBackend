@@ -1,0 +1,43 @@
+#home{
+  background: darkgray;
+  color: white;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: auto;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  padding-bottom: 40px;
+}
+
+input{
+  display: block;
+  width: 35%;
+  margin: AUTO;
+  margin-bottom: 10px;
+}
+
+a{
+  text-decoration: none;
+  color: white;
+}
+
+#sign-up{
+  border: 2px solid burlywood;
+  border-radius: 10px;
+  width: 20%;
+  background-color: lightslategray;
+  margin: auto; 
+  padding: 5%;
+  margin-top:0;
+}
+
+#sign-up:hover{
+  background-color: lightsteelblue;
+}
+
+a:hover{
+  color: rgb(75, 67, 49);
+}
