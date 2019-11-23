@@ -19,12 +19,12 @@ const client = new pg.Client(process.env.DATABASE_URL)
 client.connect();
 
 app.get('/', displayLoginForm);
-app.post('/users', findUser);
-app.get('/users/:id');
 app.post('/createAccount', createAccount);
 app.get('/createLogin', createLogin);
+app.post('/users', findUser);
 app.post('/dailyGratitude/:id', saveGratitude);
 app.get('/all/:id', getAll);
+app.get('/new/:id', getDaily);
 
 function displayLoginForm(request, response){
   response.render('pages/home');
@@ -41,7 +41,7 @@ function createAccount(request, response){
       client.query(sql, safeValues)
         .then((res) => {
           let id = res.rows[0].id;
-          response.render(`index`, {id:id});
+          response.render(`pages/daily`, {id:id});
         })
       })
 }
@@ -54,30 +54,34 @@ function findUser(request, response){
   let user = request.body.username;
   let password = request.body.password;
 
-  bcrypt.hash(password, saltRounds)
-    .then(hash => {
-      let sql='select * from users where username=$1 AND password=$2;'
-      let safeValues = [user,hash];
-    
-      client.query(sql, safeValues)
-        .then(results => {
-          if(results.rows.length > 0){
-            let id = results.rows[0].id;
-            response.render('index', {id: id});
-          } else {
-            response.redirect('/createLogin');
-          }
-        })
+  let sql = 'select * from users where username=$1;';
+  let safeValues = [user];
+
+  client.query(sql, safeValues)
+    .then(res => {
+      if(res.rows.length){
+        let hashword = res.rows[0].password;
+        bcrypt.compare(password, hashword)
+          .then(resolution => {
+            if(resolution){
+              let id = res.rows[0].id;
+              response.render('pages/daily', {id: id});
+            } else {
+              response.redirect('/');
+            }
+          })
+      }
     })
-  
-}
+};
 
 function getAll(request, response){
-  let sql = 'SELECT * FROM daily where person = $1';
+  let id = request.params.id;
+
+  let sql = 'SELECT * FROM daily where person = $1;';
   let safeValues = [request.params.id];
   client.query(sql, safeValues)
     .then(results => {
-      response.render('pages/allDays.ejs', { days: results.rows });
+      response.render('pages/allDays.ejs', { days: results.rows, id: id });
     })
 }
 
@@ -101,6 +105,11 @@ function saveToPostgresQL(gratitude, userId){
   let safeValues = [gratitude, userId];
 
   return client.query(sql, safeValues)
+}
+
+function getDaily(request, response){
+  let id = request.params.id;
+  response.render('pages/daily.ejs', {id: id});
 }
 
 app.listen(PORT, () => {

@@ -7,16 +7,28 @@ body{
 
 body img {
   position: fixed;
+  z-index: -2;
+}
+
+#background-layer{
+  position: absolute;
   z-index: -1;
+  background-color: white;
+  opacity: 0.3;
+  height: 78%;
+  width: 80%;
+  margin-left: 10%;
 }
 
 form{
-  margin-top: 5em;
+  margin-top: 10em;
+  position: absolute;
+  top: 0;
 }
 
 a{
   text-decoration: none;
-  color: white;
+  color: rgb(43, 42, 42);
 }
 
 label, input, button{
@@ -27,7 +39,7 @@ label, input, button{
 }
 
 legend{
-  margin-left: 16em;
+  margin-left: 10em;
   margin-bottom: 2em;
   font-size: 1.1em;
 }
@@ -50,9 +62,6 @@ h1{
 }
 
 @media(max-width:570px){
-  img{
-    display: none;
-  }
 
   nav li a{
     color: black;
@@ -62,6 +71,9 @@ h1{
     border: 2px solid black;
     padding: 1em;
     margin-top: 2em;
+    margin: auto;
+    width: 80%;
+    position: relative;
   }
 
   input, label, button, legend{
@@ -71,5 +83,13 @@ h1{
   legend{
     font-size: 1.1em;
     font-weight: bold;
+  }
+
+  #background-layer{
+    width: 100%;
+    height: 100%;
+    opacity: .7;
+    margin-left: 0;
+    margin-top: -6em; 
   }
 }

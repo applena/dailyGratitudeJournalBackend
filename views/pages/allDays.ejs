@@ -1,18 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('../partials/head') %>
-<link href="css/allDays.css" rel="stylesheet" />
+<link href="/css/allDays.css" rel="stylesheet" />
 <body>
-  <%- include('../partials/header') %>
-  <h2>All Journal Entries</h2>
-  <section id="allEntries"></section>
-  <section id="allDays">
-  <% days.forEach(day => { %>
-    <div>
-      <h3>Date: <%= day.date %></h3>
-      <p>Gratitude: <%= day.gratitude %></p>
-    </div>
-  <% }) %>
+  <header>
+    <h2>All Journal Entries</h2>
+    <nav>
+      <ul>
+        <li><a href="/all/<%= id %>">View All</a></li>
+        <li><a href="/new/<%= id %>">Add New</a></li>
+        <li><a href="/">Log Out</a></li>
+      </ul>
+    </nav>
+  </header>
+  <section id="all-entries">
+    <section id="allEntries"></section>
+    <section id="allDays">
+    <% days.forEach(day => { %>
+      <div>
+        <h3>Date: <%= day.date %></h3>
+        <p>Gratitude: <%= day.gratitude %></p>
+      </div>
+    <% }) %>
+    </section>
   </section>
 </body>
 </html>
